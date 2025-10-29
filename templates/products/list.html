@@ -5,13 +5,15 @@
   <a class="btn btn-primary" href="/products/new/">New</a>
   </div>
 <table class="table table-striped mt-3">
-  <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th></th></tr></thead>
+  <thead><tr><th>ID</th><th>SKU</th><th>Name</th><th>Category</th><th>Supplier</th><th>Price</th><th>Stock</th><th></th></tr></thead>
   <tbody>
   {% for p in products %}
     <tr>
       <td>{{ p.id }}</td>
+      <td>{{ p.sku }}</td>
       <td>{{ p.name }}</td>
-      <td>{{ p.category|default:"-" }}</td>
+      <td>{{ p.category.name|default:"-" }}</td>
+      <td>{{ p.supplier.name|default:"-" }}</td>
       <td>${{ p.price }}</td>
       <td>{{ p.stock }}</td>
       <td>

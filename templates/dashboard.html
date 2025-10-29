@@ -3,6 +3,34 @@
 <h3 class="mb-4">Dashboard</h3>
 
 <div class="row g-4">
+  <div class="col-md-12">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-muted">Total Products</div>
+            <div id="kpiTotalProducts" class="h4 mb-0">-</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-muted">Total Stock Units</div>
+            <div id="kpiTotalStock" class="h4 mb-0">-</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-muted">Inventory Value</div>
+            <div id="kpiInventoryValue" class="h4 mb-0">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">Inventory by Category</div>
@@ -13,7 +41,7 @@
   </div>
   <div class="col-md-6">
     <div class="card">
-      <div class="card-header">USD → INR (latest)</div>
+      <div class="card-header">USD → INR (last 30 days)</div>
       <div class="card-body">
         <canvas id="rateChart" height="120"></canvas>
       </div>
@@ -39,24 +67,35 @@ async function loadInventory() {
   });
 }
 
-async function loadRate() {
-  const res = await fetch('/api/products/external/usd_inr/');
+async function loadRateHistory() {
+  try { await fetch('/api/products/external/usd_inr/'); } catch (e) {}
+  const res = await fetch('/api/products/external/usd_inr/history/?days=30');
   const data = await res.json();
-  const rate = data.USD_INR || 0;
+  const labels = data.map(x => x.date);
+  const rates = data.map(x => x.rate);
 
   const ctx = document.getElementById('rateChart');
   new Chart(ctx, {
-    type: 'bar',
+    type: 'line',
     data: {
-      labels: ['USD→INR'],
-      datasets: [{ label: 'Rate', data: [rate], backgroundColor: '#198754' }]
+      labels,
+      datasets: [{ label: 'USD→INR', data: rates, borderColor: '#198754', fill: false }]
     },
-    options: { responsive: true, plugins: { legend: { display: false } } }
+    options: { responsive: true, plugins: { legend: { display: true } } }
   });
 }
 
+async function loadKpis() {
+  const res = await fetch('/api/products/reports/kpis/');
+  const data = await res.json();
+  document.getElementById('kpiTotalProducts').innerText = data.total_products;
+  document.getElementById('kpiTotalStock').innerText = data.total_stock_units;
+  document.getElementById('kpiInventoryValue').innerText = `$${Number(data.inventory_value).toFixed(2)}`;
+}
+
 loadInventory();
-loadRate();
+loadRateHistory();
+loadKpis();
 </script>
 {% endblock %}
 
