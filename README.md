@@ -1,5 +1,9 @@
 # Products Manager (Django + DRF + Chart.js)
 
+![Stars](https://img.shields.io/github/stars/sayleekurale/Product-Manager?style=social)
+![Made with Django](https://img.shields.io/badge/Made%20with-Django-0C4B33)
+![DRF](https://img.shields.io/badge/API-Django%20REST%20Framework-a30000)
+
 Production-ready CRUD app with Products, REST APIs, inventory dashboard, and an external USD→INR rate.
 
 ## Features
