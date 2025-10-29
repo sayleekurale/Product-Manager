@@ -16,15 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from insights import views as insights_views
+from products import views as products_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', insights_views.home, name='home'),
-    path('dashboard/', insights_views.dashboard, name='dashboard'),
-    path('posts/', insights_views.post_list, name='post_list'),
-    path('posts/new/', insights_views.post_create, name='post_create'),
-    path('posts/<int:pk>/edit/', insights_views.post_update, name='post_update'),
-    path('posts/<int:pk>/delete/', insights_views.post_delete, name='post_delete'),
-    path('api/', include('insights.api_urls')),
+    path('', products_views.home, name='home'),
+    path('dashboard/', products_views.dashboard, name='products_dashboard'),
+    path('products/', products_views.product_list, name='product_list'),
+    path('products/new/', products_views.product_create, name='product_create'),
+    path('products/<int:pk>/edit/', products_views.product_update, name='product_update'),
+    path('products/<int:pk>/delete/', products_views.product_delete, name='product_delete'),
+    path('api/products/', include('products.api_urls')),
 ]
