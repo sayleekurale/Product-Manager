@@ -3,6 +3,7 @@ services:
     name: social-insight-app
     env: python
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    preDeployCommand: python manage.py migrate --noinput
     startCommand: gunicorn social_insight_app.wsgi:application --preload --workers=3 --timeout=60
     plan: free
     envVars:
